@@ -22,45 +22,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.api.text.action;
+package org.spongepowered.api.text.transform;
 
-import org.spongepowered.api.text.Text;
+import com.google.common.collect.ImmutableMap;
+import org.spongepowered.api.text.TextElement;
+import org.spongepowered.api.text.TextTemplate;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Represents a {@link TextAction} that responds to shift-clicks.
- *
- * @param <R> the type of the result of the action
+ * A basic implementation of {@link TextTemplateApplier} backed by a {@link HashMap} and
+ * an empty {@link TextTemplate} by default.
  */
-public abstract class ShiftClickAction<R> extends TextAction<R> {
+public class SimpleTextTemplateApplier implements TextTemplateApplier {
 
-    /**
-     * Constructs a new {@link ShiftClickAction} with the given result.
-     *
-     * @param result The result of the shift click action
-     */
-    ShiftClickAction(R result) {
-        super(result);
+    protected final Map<String, TextElement> params = new HashMap<>();
+    protected TextTemplate template;
+
+    public SimpleTextTemplateApplier(TextTemplate template) {
+        this.template = template;
+    }
+
+    public SimpleTextTemplateApplier() {
+        this(TextTemplate.EMPTY);
     }
 
     @Override
-    public void applyTo(Text.Builder builder) {
-        builder.onShiftClick(this);
+    public ImmutableMap<String, TextElement> getParameters() {
+        return ImmutableMap.copyOf(this.params);
     }
 
-    /**
-     * Inserts some text into the chat prompt.
-     */
-    public static final class InsertText extends ShiftClickAction<String> {
-
-        /**
-         * Constructs a new {@link InsertText} instance that will insert text at
-         * the current cursor position in the chat when it is shift-clicked.
-         *
-         * @param text The text to insert
-         */
-        InsertText(String text) {
-            super(text);
-        }
-
+    @Override
+    public void setParameter(String key, TextElement value) {
+        this.params.put(key, value);
     }
+
+    @Override
+    public TextTemplate getTemplate() {
+        return this.template;
+    }
+
+    @Override
+    public void setTemplate(TextTemplate template) {
+        this.template = template;
+    }
+
 }

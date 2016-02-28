@@ -22,7 +22,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-@NonnullByDefault
-package org.spongepowered.api.util.test;
+package org.spongepowered.api.text.transform;
 
-import org.spongepowered.api.util.annotation.NonnullByDefault;
+/**
+ * Represents a {@link TextFormatter} that is sectioned into different
+ * sub-formatters.
+ *
+ * @param <E> Type of formatter
+ */
+public interface PartitionedTextFormatter<E extends TextFormatter> extends TextFormatter<E> {
+
+}

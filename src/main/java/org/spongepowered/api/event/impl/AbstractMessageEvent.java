@@ -22,45 +22,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.spongepowered.api.text.action;
+package org.spongepowered.api.event.impl;
 
+import org.spongepowered.api.event.message.MessageEvent;
+import org.spongepowered.api.eventgencore.annotation.UseField;
 import org.spongepowered.api.text.Text;
 
 /**
- * Represents a {@link TextAction} that responds to shift-clicks.
- *
- * @param <R> the type of the result of the action
+ * Abstract implementation of {@link MessageEvent}. Contains a
+ * {@link MessageFormatter} instance to hold the message data.
  */
-public abstract class ShiftClickAction<R> extends TextAction<R> {
+@SuppressWarnings("NullableProblems")
+public abstract class AbstractMessageEvent extends AbstractEvent implements MessageEvent {
 
-    /**
-     * Constructs a new {@link ShiftClickAction} with the given result.
-     *
-     * @param result The result of the shift click action
-     */
-    ShiftClickAction(R result) {
-        super(result);
-    }
+    @UseField protected MessageFormatter formatter;
+    @UseField protected Text originalMessage;
 
     @Override
-    public void applyTo(Text.Builder builder) {
-        builder.onShiftClick(this);
+    protected final void init() {
+        this.originalMessage = this.formatter.format();
     }
 
-    /**
-     * Inserts some text into the chat prompt.
-     */
-    public static final class InsertText extends ShiftClickAction<String> {
-
-        /**
-         * Constructs a new {@link InsertText} instance that will insert text at
-         * the current cursor position in the chat when it is shift-clicked.
-         *
-         * @param text The text to insert
-         */
-        InsertText(String text) {
-            super(text);
-        }
-
-    }
 }
